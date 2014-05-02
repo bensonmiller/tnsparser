@@ -1,0 +1,115 @@
+grammar Tnsnames
+
+  rule tns
+    (comment / blankline / net_service_stanza)*
+  end
+
+  rule net_service_stanza
+    net_service_identifier expression* <NetServiceStanza>
+  end
+
+  rule expression
+    s '(' s keyword s eq s value s ')' s eoc? <Expression>
+  end
+
+  rule value
+    dotword / expression* 
+  end
+
+  rule keyword
+    key_address 
+    / 
+    key_addresslist 
+    / 
+    key_connectdata
+    / 
+    key_description
+    / 
+    key_host 
+    / 
+    key_port 
+    / 
+    key_protocol 
+    /
+    key_server
+    /
+    key_serviceName
+  end
+
+  rule net_service_identifier
+    !'(' s dotword s eq
+  end
+
+  rule key_address
+    [aA] [dD] [dD] [rR] [eE] [sS] [sS] !([_] [lL] [iI] [sS] [tT]) <KeywordAddress>
+  end
+
+  rule key_addresslist
+    [aA] [dD] [dD] [rR] [eE] [sS] [sS] [_] [lL] [iI] [sS] [tT] <KeywordAddressList>
+  end
+
+  rule key_connectdata
+    [cC] [oO] [nN] [nN] [eE] [cC] [tT] [_] [dD] [aA] [tT] [aA] <KeywordConnectData>
+  end
+
+  rule key_description
+    [dD] [eE] [sS] [cC] [rR] [iI] [pP] [tT] [iI] [oO] [nN] <KeywordDescription>
+  end
+
+  rule key_protocol
+    [pP] [rR] [oO] [tT] [oO] [cC] [oO] [lL] <KeywordProtocol>
+  end
+
+  rule key_port
+    [pP] [oO] [rR] [tT] <KeywordPort>
+  end
+
+  rule key_host
+    [hH] [oO] [sS] [tT] <KeywordHost>
+  end
+
+  rule key_server
+    [sS] [eE] [rR] [vV] [eE] [rR] <KeywordServer>
+  end
+
+  rule key_serviceName
+    [sS] [eE] [rR] [vV] [iI] [cC] [eE] [_] [nN] [aA] [mM] [eE] <KeywordServiceName>
+  end
+
+  rule comment
+    '#' (!eoc .)* eoc <Comment>
+  end
+
+  rule eof
+    !(.)
+  end
+
+  rule eoc
+    "\n" / eof
+  end
+
+  rule s
+    S?
+  end
+
+  rule S
+    [ \t\n]+
+  end
+
+  rule word
+    [\w]+
+  end
+
+  rule blankline
+    [\n] s <Blankline>
+  end
+
+  rule dotword
+    word ('.' word)*
+  end
+
+  rule eq
+   '='
+  end
+
+end
